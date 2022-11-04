@@ -1,0 +1,50 @@
+/**{
+    background: url(../images/dj-play-wallpaper.jpeg);
+    height: 100%;
+    background-size: cover;
+}
+*/  
+
+
+
+
+
+/* Main-Cover page image starts */
+.cover-hi {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 0;
+    margin-left: 75em;
+}
+
+.cover-img{
+    background: url(../images/wall-2.png);
+    height: 100%;
+    object-fit: cover;
+}
+
+.cover-hi ul{
+    color: aqua;
+    list-style-type: none;
+    font-size: 3.5em;
+    background: rgba(255, 255, 255, .9);
+    padding: 20px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: #555;
+}
+
+.cover-hi ul li {
+    padding: 5px 0;
+}
+
+.cover-hi ul li:first-child {
+    font-size: 0.7em;
+}
+
+.cover-hi ul li:last-child {
+    font-size: 0.5em;
+    font-style: italic;
+}
+
+/* Main Cover Image Ends */
