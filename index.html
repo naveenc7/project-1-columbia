@@ -3,34 +3,45 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  />
+
   <link rel="stylesheet" href="./assets/css/style.css" />
-  <title></title> <!-- Website Name Added-->
+  <title>DJ Playn</title> <!-- Website Name Added-->
 </head>
 
 <body>
-  <header>
-    <h1>DJ<span class="play">play</span>n</h1>
-    <nav>
+  <header class="header">
+    <h1 id="title">DJ<span>play</span>n</h1>
+    <nav class="navbar-default top-nav">
         <ul>
-            <li>
+            <li class="searchChoice">
                 <button>Artist</button>
             </li>
-            <li>
+            <li class="searchChoice">
                 <button>Album</button>
             </li>
-            <li>
+            <li class="searchChoice">
                 <button>Genre</button>
             </li>
-            <li>
+            <li class="searchChoice">
                 <button>Artist</button>
             </li>
         </ul>
     </nav>
+
+    <nav id="EnterSearch">Enter your search selection:  <input type="text" name="Enter Search"></nav>
+
   </header>
 <!-- Cover Page; Main -->
+<img src="./assets/images/wall-2.png" alt="dj tape" class="cover-img" />
 <section class="main-cover">
     <!--image-->
-    <div class="cover-img">
+    
         <div class="cover-hi">
             <ul>
                 <li>hello there,</li>
