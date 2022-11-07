@@ -13,7 +13,6 @@
 }
 
 .header {
-    display: inline-flex;
     padding: 20px;
     color: black;
 }
@@ -30,11 +29,20 @@
     font-size: 20px;
 }
 
-.search-choice {
+.searchChoice {
     display:inline-flex;
-    margin-right: 25px;
+    margin-right: 55px;
     margin-bottom: 25px;
+    height: 50px;
+    /* width: 200px; */
    
+}
+
+#EnterSearch {
+    float: right;
+    font-size: 20px;
+    margin-top: 75px;
+    margin-bottom: 25px;
 }
 
 
