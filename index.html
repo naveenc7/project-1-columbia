@@ -15,28 +15,24 @@
 </head>
 
 <body>
-  <header class="header">
-    <h1 id="title">DJ<span>play</span>n</h1>
-    <nav class="navbar-default top-nav">
-        <ul>
-            <li class="searchChoice">
-                <button>Artist</button>
-            </li>
-            <li class="searchChoice">
-                <button>Album</button>
-            </li>
-            <li class="searchChoice">
-                <button>Genre</button>
-            </li>
-            <li class="searchChoice">
-                <button>Artist</button>
-            </li>
-        </ul>
-    </nav>
-
-    <nav id="EnterSearch">Enter your search selection:  <input type="text" name="Enter Search"></nav>
-
+  <header class="header row">
+    <h1 class="col-sm-6" id="title">DJ<span>play</span>n</h1>
   </header>
+  <body>
+    <div class="flex-row align-center justify-center min-100-vh bg-primary">
+      <div class="col-12 col-md-9 flex-column align-center bg-light p-5">
+        <form id="search-form" class="form w-100">
+          <input id="search-input" class="form-input w-100" type="text" placeholder="Search!">
+          <select id="format-input" class="form-input w-100">
+            <option value="" disabled selected>Select a format...</option>
+            <option value="maps">Artist</option>
+            <option value="audio">Song</option>
+            <option value="photos">Genre</option>
+          </select>
+          <button class="btn btn-info btn-block">Click Me</button>
+        </form>
+      </div>
+    </div>
 <!-- Cover Page; Main -->
 <img src="./assets/images/wall-2.png" alt="dj tape" class="cover-img" />
 <section class="main-cover">
