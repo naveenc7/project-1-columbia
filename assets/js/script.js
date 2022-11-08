@@ -10,10 +10,10 @@ function handleSearchFormSubmit(event) {
     console.error('You need a search input value!');
     return;
   }
-
-  var queryString = ' https://itunes.apple.com/search?term=' + searchInputVal + '&limit=10';
-
+  var queryString = 'https://itunes.apple.com/search?term=' + searchInputVal + '&entity=' + formatInputVal + 'limit=5';
+  console.log (queryString);
   location.assign(queryString);
+ 
 }
 
 searchFormEl.addEventListener('submit', handleSearchFormSubmit);
