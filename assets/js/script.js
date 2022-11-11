@@ -2,7 +2,7 @@ var searchFormEl = document.querySelector('#search-form');
 
 function handleSearchFormSubmit(event) {
   event.preventDefault();
-
+  // gathers the inouts given from the user
   var searchInputVal = document.querySelector('#search-input').value;
   var formatInputVal = document.querySelector('#format-input').value;
 
@@ -13,13 +13,12 @@ function handleSearchFormSubmit(event) {
     console.error('You need a search input value!');
     return;
   }
-
+  // this builds the string to send to the display-search JS
   var queryString = './search-results.html?q=' + searchInputVal + '&format=' + formatInputVal;
-  // var queryString = 'https://itunes.apple.com/search?term=' + searchInputVal + '&entity=' + formatInputVal;
 
   location.assign(queryString);
   console.log (queryString);
  
 }
-
+// this looks for the push of the button after the choices are made
 searchFormEl.addEventListener('submit', handleSearchFormSubmit);
