@@ -17,7 +17,7 @@
     color: black;
 }
 /* Header/Navigation Section */
-.container {
+/* .container {
     width: 100%;
     margin: 0 auto;
 }
@@ -57,19 +57,19 @@ button {
 button:hover {
     background-color: #f362aa;
     color: #fff;
-  }
+  } */
   
   /* The user is actively pressing down on the element */
-  button:active {
+  /* button:active {
     font-size: 120%;
     box-shadow: 0 0 10px #000 inset;
-  }
+  } */
   
   /* The element is currently in focus, either by tabbing to or clicking on it */
-  button:focus {
+  /* button:focus {
     outline: none;
     border-color: black;
-  }
+  } */
 
 /* Navigation class ends */ 
 /* Changes: - #title {
@@ -102,7 +102,7 @@ button:hover {
 
 
 /* Main-Cover page image starts */
-.cover-hi {
+/* .cover-hi {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -125,20 +125,35 @@ button:hover {
     padding: 20px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color: #555;
-}
+} */
 
 /* .cover-hi ul li {
     padding: 5px 0;
 } */
 
-.cover-hi ul li:first-child {
+/* .cover-hi ul li:first-child {
     font-size: 0.7em;
 }
 
 .cover-hi ul li:last-child {
     font-size: 0.5em;
     font-style: italic;
-}
+} */
 
 
 /* Main Cover Image Ends */
+
+body {
+    font-family: 'Fira Sans', sans-serif;
+  }
+  
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+  }
+  

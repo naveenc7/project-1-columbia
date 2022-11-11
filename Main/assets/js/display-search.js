@@ -11,6 +11,8 @@ function getParams() {
   var format = searchParamsArr[1].split('=').pop();
 
   searchApi(query, format);
+  console.log (query)
+  console.log (format)
 }
 
 function printResults(resultObj) {
@@ -25,26 +27,20 @@ function printResults(resultObj) {
   resultCard.append(resultBody);
 
   var titleEl = document.createElement('h3');
-  titleEl.textContent = resultObj.title;
+  titleEl.textContent = resultObj.trackName;
 
   var bodyContentEl = document.createElement('p');
   bodyContentEl.innerHTML =
-    '<strong>Date:</strong> ' + resultObj.date + '<br/>';
+    '<strong>Artist:</strong> ' + resultObj.artistName + '<br/>';
 
-  if (resultObj.subject) {
+  if (resultObj.artist) {
     bodyContentEl.innerHTML +=
-      '<strong>Subjects:</strong> ' + resultObj.subject.join(', ') + '<br/>';
-  } else {
-    bodyContentEl.innerHTML +=
-      '<strong>Subjects:</strong> No subject for this entry.';
-  }
+      '<strong>Songs:</strong> ' + resultObj.artist;
+  } 
 
-  if (resultObj.description) {
+  if (resultObj.collectionName) {
     bodyContentEl.innerHTML +=
-      '<strong>Description:</strong> ' + resultObj.description[0];
-  } else {
-    bodyContentEl.innerHTML +=
-      '<strong>Description:</strong>  No description for this entry.';
+      '<strong>Album:</strong> ' + resultObj.collectionName;
   }
 
   var linkButtonEl = document.createElement('a');
@@ -58,16 +54,19 @@ function printResults(resultObj) {
 }
 
 function searchApi(query, format) {
-  var locQueryUrl = 'https://www.loc.gov/search/?fo=json';
+  var locQueryUrl = 'https://itunes.apple.com/search?fo=json';
 
   if (format) {
-    locQueryUrl = 'https://www.loc.gov/' + format + '/?fo=json';
+    locQueryUrl = 'https://itunes.apple.com/search?term=' + query;
   }
 
-  locQueryUrl = locQueryUrl + '&q=' + query;
+  locQueryUrl = locQueryUrl + '&entity=' + format + "&limit=25";
+
+  console.log(locQueryUrl);
 
   fetch(locQueryUrl)
     .then(function (response) {
+      console.log(response)
       if (!response.ok) {
         throw response.json();
       }
@@ -76,9 +75,8 @@ function searchApi(query, format) {
     })
     .then(function (locRes) {
       // write query to page so user knows what they are viewing
-      resultTextEl.textContent = locRes.search.query;
-
       console.log(locRes);
+      
 
       if (!locRes.results.length) {
         console.log('No results found!');
