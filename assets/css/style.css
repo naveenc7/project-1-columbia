@@ -111,7 +111,8 @@ button:hover {
 }
 
 .cover-img{
-    height: 350px;
+    background: url(../images/wall-2.png);
+    height: 658px;
     width: 100%;
     margin-bottom: 25px;
     object-fit: cover;
