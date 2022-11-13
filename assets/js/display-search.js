@@ -48,6 +48,9 @@ function printResults({ trackName, artistName, artist, collectionName, trackView
       collectionName;
   }
 
+  // var coverUrlEl = document.createElement('p');
+  // coverUrlEl.innerHTML = urlToReturn
+
   var linkButtonEl = document.createElement('a');
   linkButtonEl.textContent = 'View Song';
   linkButtonEl.setAttribute('href', trackViewUrl);
@@ -87,12 +90,12 @@ function searchApi(query, format) {
         let albumCoverUrl = getAlbumCover(data.results[0].artistName, data.results[0].collectionName);
         printResults({...data.results[0], albumCoverUrl});
 
-        // for (var i = 0; i < data.results.length; i++) {
-        //   let albumCoverUrl = getAlbumCover(data.results[i].artistName, data.results[i].collectionName);
-        //   console.log(albumCoverUrl);
-        //   printResults({ ...data.results[i], albumCoverUrl });
-        //   // printResults( {...data.results[i]} );
-        // }
+        for (var i = 0; i < data.results.length; i++) {
+          let albumCoverUrl = getAlbumCover(data.results[i].artistName, data.results[i].collectionName);
+          // console.log(albumCoverUrl);
+          printResults({ ...data.results[i], albumCoverUrl });
+          // printResults( {...data.results[i]} );
+        }
       }
     })
     .catch(function (error) {
@@ -110,41 +113,16 @@ async function getAlbumCover(artist, album) {
   const data = await response.json();
   if(!data.album.image.length) {
     console.log('No image found!');
-    return null;
+    // return null;
   }
   resultContentEl.textContent = '';
   let urlToReturn = data.album.image[2]['#text'];
   console.log(urlToReturn)
   return urlToReturn;
 
-  // await fetch(albumCover)
-  //   .then(function (response) {
-  //     if (!response.ok) {
-  //       throw response.json();
-  //       return;
-  //     }
-  //     return response.json();
-  //   })
-  //   .then(function (albumCoverData) {
-
-  //     if (!albumCoverData.album.image.length) {
-  //       console.log('No image found!');
-  //       return;
-  //     }
-
-  //     resultContentEl.textContent = '';
-  //     urlToReturn = albumCoverData.album.image[2]['#text'];
-  //     console.log(urlToReturn);
-  //   })
-  //   .catch((error) => {
-  //     console.log('Error occurred!');
-  //     throw error;
-  //   });
-
-
 }
 
-// http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=0de9738710e0d0e898651bdeef65a006&artist=Cher&album=Believe
+
 
 function handleSearchFormSubmit(event) {
   event.preventDefault();
