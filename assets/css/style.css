@@ -144,8 +144,13 @@ button:hover {
 
 /* Main Cover Image Ends */
 
+
+
 body {
+
     font-family: 'Fira Sans', sans-serif;
+    background-image: url(../images/dj-play-wallpaper.jpeg);
+    background-size: cover;
   }
   
   h1,
