@@ -1,143 +1,162 @@
-var resultTextEl = document.querySelector('#result-text');
-var resultContentEl = document.querySelector('#result-content');
-var searchFormEl = document.querySelector('#search-form');
-var searchInputVal; // leave this uninitialized until user enters something
+var resultTextEl = document.querySelector("#result-text");
+var resultContentEl = document.querySelector("#result-content");
+var searchFormEl = document.querySelector("#search-form");
+let searchInputVal = null;
+let formatInputVal = null;
+let cardNodeList = null;
+let index = 0;
 
-
-function getParams() {
-  var searchParamsArr = document.location.search.split('&');
-  console.log('searParamsArray is', searchParamsArr);
-  var query = searchParamsArr[0].split('=').pop();
-  var format = searchParamsArr[1].split('=').pop();
-
-  searchApi(query, format);
-  console.log(query)
-  console.log(format)
+// this function runs on script load
+function getParamsAndRender() {
+  let searchParamsArr = document.location.search.split("&");
+  let artist = searchParamsArr[0].split("=").pop();
+  let format = searchParamsArr[1].split("=").pop();
+  // run the function below, passing in artist and format as arguments
+  getArtistSongsAndRender(artist, format);
 }
 
-function printResults({ trackName, artistName, artist, collectionName, trackViewUrl, albumCoverUrl}) {
-  // console.log(albumCoverUrl);
+function handleSearchFormSubmit(event) {
+  event.preventDefault();
 
-  var resultCard = document.createElement('div');
-  var imageContainer = document.createElement('div');
-  resultCard.classList.add('card', 'bg-light', 'text-dark', 'mb-3', 'p-3');
+  searchInputVal = document.querySelector("#search-input").value;
+  formatInputVal = document.querySelector("#format-input").value;
 
-  var resultBody = document.createElement('div');
-  resultBody.classList.add('card-body');
+  // if either input field is left blank, show an alert and return out of function
+  if (!searchInputVal || !formatInputVal) {
+    console.log("Enter an artist's name and format");
+    alert("Enter an artist's name and format!");
+    return null;
+  }
+  // otherwise, call the function below, passing in the two arguments
+  getArtistSongsAndRender(searchInputVal, formatInputVal);
+}
+
+// this function is declared as asynchronous, in order to await the results
+// from getting the songs list, as well as the album cover images
+async function getArtistSongsAndRender(artist, format) {
+  // to cover the case that another search is being executed,
+  // reset resultContentEl and index
+  resultContentEl.innerHTML = "";
+  index = 0;
+
+  let listOfSongs = null;
+
+  // get songs from artist
+  await getSongs(artist, format)
+    .then((songsList) => {
+      // if song list is falsy, i.e. no songs were returned, throw an error
+      if (!songsList) {
+        resultContentEl.innerHTML = `<h4 style='text-align: center'>Sorry, your search produced no results. Try again!</h4>`;
+        throw new Error("No songs found for the desired artist. Try again");
+      }
+
+      listOfSongs = [...songsList];
+
+      songsList.forEach((songObject, index) => {
+        const { artistName, collectionName, trackViewUrl, trackName } =
+          songObject;
+        renderCard(artistName, collectionName, trackViewUrl, trackName, index);
+      });
+    })
+    .catch((error) => console.error(error));
+
+  // now that the cards exist, assign them to cardNodeList
+  cardNodeList = document.querySelectorAll("div.card");
+
+  for (song of listOfSongs) {
+    // destructure name and album from the current song object in the song list
+    const { artistName, collectionName } = song;
+    // now pass the name and album into the asynchronous function getAlbumCover
+    await getAlbumCover(artistName, collectionName).then((imageUrl) => {
+           renderAlbumCoverImage(imageUrl, index);
+    });
+    // update index by one
+    index++;
+  }
+}
+
+// this function is declared as asynchronous, so I can use keyword 'await' in it
+async function getSongs(query, format) {
+  var locQueryUrl =
+    "https://itunes.apple.com/search?term=" +
+    query +
+    "&entity=" +
+    format +
+    "&limit=25";
+  // here I'm using await, because I want to await the completion of the asynchronous
+  // fetch operation and have the promise resolve into a usable value that I store
+  // in response
+  let response = await fetch(locQueryUrl);
+  // I also await response.json and store its promise's resolution in the variable
+  // data
+  let data = await response.json();
+  const { results: songList } = data;
+  return songList;
+}
+
+// this function is declared as asynchronous, so I can use keyword 'await' in it
+async function getAlbumCover(artist, album) {
+  let imageUrl = null;
+  var albumCover =
+    "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=0de9738710e0d0e898651bdeef65a006&artist=" +
+    artist +
+    "&album=" +
+    album +
+    "&format=json";
+
+  const response = await fetch(albumCover);
+  const data = await response.json();
+  if (data.error) {
+    return imageUrl;
+  }
+  imageUrl = data.album.image[2]["#text"];
+  return imageUrl;
+}
+
+function renderAlbumCoverImage(imageUrl, i) {
+  // create a div element
+  var resultImage = document.createElement("div");
+  // add a value to its class attribute
+  resultImage.classList.add("card-image");
+  if (!imageUrl) {
+    resultImage.textContent = "No Image Avail";
+    resultImage.setAttribute("style", "display: flex; align-items: center");
+    cardNodeList[i].append(resultImage);
+    return null;
+  }
+  // otherwise, go ahead and set the background image to the url
+  resultImage.setAttribute("style", `background-image: url("${imageUrl}")`);
+  cardNodeList[i].append(resultImage);
+}
+
+function renderCard(artistName, collectionName, trackViewUrl, trackName, i) {
+  var resultCard = document.createElement("div");
+
+  resultCard.classList.add("card", "bg-light", "text-dark", "mb-3", "p-3");
+
+  var resultBody = document.createElement("div");
+  resultBody.classList.add("card-body");
   resultCard.append(resultBody);
 
-  var titleEl = document.createElement('h3');
+  var titleEl = document.createElement("h3");
   titleEl.textContent = trackName;
 
-  var bodyContentEl = document.createElement('p');
-  bodyContentEl.innerHTML =
-    '<strong>Artist:</strong> ' + artistName + '<br/>';
-
-  if (artist) {
-    bodyContentEl.innerHTML +=
-      '<strong>Songs:</strong> ' + artist;
-  }
-
+  var bodyContentEl = document.createElement("p");
+  bodyContentEl.innerHTML = "<strong>Artist:</strong> " + artistName + "<br/>";
   if (collectionName) {
     bodyContentEl.innerHTML +=
-      '<strong>Album:</strong> ' + collectionName;
+      "<strong>Album:</strong> " + collectionName + "<br/>";
   }
-
-  if (collectionName) {
-    bodyContentEl.innerHTML +=
-      collectionName;
-  }
-
-  // var coverUrlEl = document.createElement('p');
-  // coverUrlEl.innerHTML = urlToReturn
-
-  var linkButtonEl = document.createElement('a');
-  linkButtonEl.textContent = 'View Song';
-  linkButtonEl.setAttribute('href', trackViewUrl);
-  linkButtonEl.classList.add('btn', 'btn-dark');
+  var linkButtonEl = document.createElement("a");
+  linkButtonEl.textContent = "View Song";
+  linkButtonEl.setAttribute("href", trackViewUrl);
+  linkButtonEl.classList.add("btn", "btn-dark");
 
   resultBody.append(titleEl, bodyContentEl, linkButtonEl);
 
   resultContentEl.append(resultCard);
 }
 
-function searchApi(query, format) {
-  var locQueryUrl = 'https://itunes.apple.com/search?fo=json';
+searchFormEl.addEventListener("submit", handleSearchFormSubmit);
 
-  if (format) {
-    locQueryUrl = 'https://itunes.apple.com/search?term=' + query;
-  }
-
-  locQueryUrl = locQueryUrl + '&entity=' + format + "&limit=25";
-
-  fetch(locQueryUrl)
-    .then(function (response) {
-      console.log(response)
-      if (!response.ok) {
-        throw response.json();
-      }
-
-      return response.json();
-    })
-    .then(function (data) {
-      console.log(data);
-
-      if (!data.results.length) {
-        console.log('No results found!');
-        resultContentEl.innerHTML = '<h3>No results found, search again!</h3>';
-      } else {
-        resultContentEl.textContent = '';
-        let albumCoverUrl = getAlbumCover(data.results[0].artistName, data.results[0].collectionName);
-        printResults({...data.results[0], albumCoverUrl});
-
-        for (var i = 0; i < data.results.length; i++) {
-          let albumCoverUrl = getAlbumCover(data.results[i].artistName, data.results[i].collectionName);
-          // console.log(albumCoverUrl);
-          printResults({ ...data.results[i], albumCoverUrl });
-          // printResults( {...data.results[i]} );
-        }
-      }
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
-}
-
-// let temp = getAlbumCover("Michael Jackson", "The Essential Michael Jackson");
-// console.log(temp);
-
-async function getAlbumCover(artist, album) {
-  var albumCover = 'http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=0de9738710e0d0e898651bdeef65a006&artist=' + artist + '&album=' + album + '&format=json';
-
-  const response = await fetch(albumCover);
-  const data = await response.json();
-  if(!data.album.image.length) {
-    console.log('No image found!');
-    // return null;
-  }
-  resultContentEl.textContent = '';
-  let urlToReturn = data.album.image[2]['#text'];
-  console.log(urlToReturn)
-  return urlToReturn;
-
-}
-
-
-
-function handleSearchFormSubmit(event) {
-  event.preventDefault();
-
-  searchInputVal = document.querySelector('#search-input').value;
-  var formatInputVal = document.querySelector('#format-input').value;
-
-  if (!searchInputVal) {
-    console.error('You need a search input value!');
-    return;
-  }
-
-  searchApi(searchInputVal, formatInputVal);
-}
-
-searchFormEl.addEventListener('submit', handleSearchFormSubmit);
-
-getParams();
+getParamsAndRender();
