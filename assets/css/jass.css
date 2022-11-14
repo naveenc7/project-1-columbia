@@ -1086,6 +1086,8 @@ a:hover {
 .card {
   border: 1px solid #1a1a1a;
   margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
 }
 
 .card .card-header {
@@ -1096,6 +1098,15 @@ a:hover {
 
 .card .card-body {
   padding: 0.375rem;
+}
+
+.card .card-image {
+  background-color: black;
+  width: 174px;
+  height: 174px;
+  font-size: 2em;
+  color: white;
+  text-align: center;
 }
 
 .card .card-footer {
