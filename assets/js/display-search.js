@@ -9,10 +9,10 @@ let index = 0;
 // this function runs on script load
 function getParamsAndRender() {
   let searchParamsArr = document.location.search.split("&");
-  let artist = searchParamsArr[0].split("=").pop();
-  let format = searchParamsArr[1].split("=").pop();
+  let theArtist = searchParamsArr[0].split("=").pop();
+  let theFormat = searchParamsArr[1].split("=").pop();
   // run the function below, passing in artist and format as arguments
-  getArtistSongsAndRender(artist, format);
+  getArtistSongsAndRender(theArtist, theFormat);
 }
 
 function handleSearchFormSubmit(event) {
@@ -51,7 +51,7 @@ async function getArtistSongsAndRender(artist, format) {
       }
 
       listOfSongs = [...songsList];
-
+     
       songsList.forEach((songObject, index) => {
         const { artistName, collectionName, trackViewUrl, trackName } =
           songObject;
@@ -90,7 +90,8 @@ async function getSongs(query, format) {
   // I also await response.json and store its promise's resolution in the variable
   // data
   let data = await response.json();
-  const { results: songList } = data;
+  const { results: songList } = data; // the returned data object looks like { results: .... }
+  //const results = data.results;
   return songList;
 }
 
@@ -98,7 +99,7 @@ async function getSongs(query, format) {
 async function getAlbumCover(artist, album) {
   let imageUrl = null;
   var albumCover =
-    "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=0de9738710e0d0e898651bdeef65a006&artist=" +
+    "https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=0de9738710e0d0e898651bdeef65a006&artist=" +
     artist +
     "&album=" +
     album +
