@@ -12,5 +12,5 @@ https://naveenc7.github.io/project-1-columbia/
 
 ## Screenshot
 
-![Screenshot for my homework](./assets/DJPlayn_Project_1)
+![Screenshot for my homework](./assets/images/DJPlayn_Project_1.png)
 
